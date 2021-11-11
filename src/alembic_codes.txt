@@ -1,0 +1,5 @@
+# revisao
+alembic revision --autogenerate -m "Hello World"
+
+# mandar mudanças para o banco
+alembic upgrade head
