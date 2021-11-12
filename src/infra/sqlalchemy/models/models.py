@@ -12,6 +12,7 @@ class User(Base):
     cellphone  = Column(String(20), unique=True)
     password   = Column(String(255))
     activate   = Column(Boolean, default=True)
+    roles      = relationship('RoleUser', back_populates="roles_users")
 
     def __init__(self, username, picture, stars, type, cellphone, password, activate=True):
         self.username  = username
@@ -111,8 +112,8 @@ class RoleUser(Base):
     id         = Column(Integer, primary_key=True, autoincrement=True)
     id_role    = Column(ForeignKey('roles.id'), name="fk_role_roles_users", primary_key=True)
     id_user    = Column(ForeignKey('users.id'), name="fk_user_roles_users", primary_key=True)
-    role       = relationship('Role', foreign_keys=id_role)
-    user       = relationship('User', foreign_keys=id_user)
+    role       = relationship('Role', foreign_keys=id_role, back_populates="roles_users")
+    user       = relationship('User', foreign_keys=id_user,  back_populates="roles_users")
     activate   = Column(Boolean, default=True)
 
     def __init__(self, user, role, activate=True):
