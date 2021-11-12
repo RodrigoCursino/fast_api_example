@@ -1,3 +1,9 @@
 .vscode
-venv36
+
+#alembic env
 alembic.ini
+
+#python
+venv36
+__pycache__
+*.pyc

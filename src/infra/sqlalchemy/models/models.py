@@ -12,7 +12,7 @@ class User(Base):
     cellphone  = Column(String(20), unique=True)
     password   = Column(String(255))
     activate   = Column(Boolean, default=True)
-    roles      = relationship('RoleUser', back_populates="roles_users")
+    #roles      = relationship('RoleUser', back_populates="roles_users")
 
     def __init__(self, username, picture, stars, type, cellphone, password, activate=True):
         self.username  = username
@@ -93,13 +93,17 @@ class Statistic(Base):
     __tablename__         = "statistics"
     id                    = Column(Integer, primary_key=True, autoincrement=True)
     id_user               = Column(ForeignKey('users.id'), name="fk_users_statistics", primary_key=True)
-    # ['GOL', 'ASSSITENCIA', 'VITORIA', 'DERROTA', 'EMPATE']
+    id_match              = Column(ForeignKey('matches.id'), name="fk_match_statistics", primary_key=True)
     date                  = Column(DateTime)
+    # ['GOL', 'ASSSITENCIA', 'VITORIA', 'DERROTA', 'EMPATE']
     status                = Column(String(50))
     activate              = Column(Boolean, default=True)
+    #match                 = relationship('Match', back_populates="matchs")
+    #user                  = relationship('User', back_populates="users")
 
-    def __init__(self, id_user, date, status, activate):
+    def __init__(self, id_user, id_match, date, status, activate):
         self.id_user  = id_user 
+        self.id_match = id_match 
         self.date     = date 
         self.status   = status
         self.activate = activate     
@@ -112,8 +116,8 @@ class RoleUser(Base):
     id         = Column(Integer, primary_key=True, autoincrement=True)
     id_role    = Column(ForeignKey('roles.id'), name="fk_role_roles_users", primary_key=True)
     id_user    = Column(ForeignKey('users.id'), name="fk_user_roles_users", primary_key=True)
-    role       = relationship('Role', foreign_keys=id_role, back_populates="roles_users")
-    user       = relationship('User', foreign_keys=id_user,  back_populates="roles_users")
+    #role       = relationship('Role', foreign_keys=id_role, back_populates="roles_users")
+    #user       = relationship('User', foreign_keys=id_user,  back_populates="roles_users")
     activate   = Column(Boolean, default=True)
 
     def __init__(self, user, role, activate=True):
