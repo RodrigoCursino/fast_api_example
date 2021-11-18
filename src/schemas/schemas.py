@@ -1,33 +1,61 @@
 from pydantic import BaseModel
 from typing   import Optional, List
+from sqlalchemy.sql import roles
 
+from sqlalchemy.sql.functions import user
+
+# -------- USER -------- #
 class Role(BaseModel):
     
-    id         : Optional[str] = None
+    id         : Optional[int] = None
     name       : str
 
     class Config():
         orm_mode = True
+
+class RoleByUser(BaseModel):
+    
+    id         : Optional[int] = None        
+    role       : Role 
 
 class User(BaseModel):
 
-    id         : Optional[str] = None
+    id         : Optional[int] = None
     username   : str
     picture    : str
     stars      : int
-    type       : str
     cellphone  : str
     password   : str
+    roles      : List[RoleByUser] = []
 
     class Config():
         orm_mode = True
 
+class UserLogin(BaseModel):
+    
+    cellphone  : str
+    password   : str
+ 
+class RoleUser(BaseModel):
+    
+    id         : Optional[int] = None        
+    id_role    : int
+    id_user    : int
+    role       : List[Role]       
+    user       : List[User]   
+
+    class Config():
+        orm_mode = True   
+# -------- USER -------- #  
+
+# -------- Match -------- #
 class Team(BaseModel):
 
-    id         : Optional[str] = None        
+    id         : Optional[int] = None        
     name       : str
     color      : str
     picture    : str
+    #players    : List[User] = []
 
     class Config():
         orm_mode = True
@@ -35,7 +63,7 @@ class Team(BaseModel):
 
 class TeamPlayer(BaseModel):
 
-    id         : Optional[str] = None         
+    id         : Optional[int] = None         
     id_team    : int
     id_user    : int
     date       : str
@@ -48,7 +76,7 @@ class TeamPlayer(BaseModel):
 
 class Match(BaseModel):
 
-    id                     : Optional[str] = None                   
+    id                     : Optional[int] = None                   
     id_team_one            : int
     id_team_two            : int
     match_status_team_one  : str
@@ -61,24 +89,19 @@ class Match(BaseModel):
     
 class Statistic(BaseModel):
     
-    id         : Optional[str] = None           
+    id         : Optional[int] = None           
     id_user    : int       
     date       : str   
-    status     : str    
+    status     : str 
+    match      : List[Match]   
+    user       : List[Match]
 
     class Config():
-        orm_mode = True        
+        orm_mode = True  
 
-class RoleUser(BaseModel):
-    
-    id         : Optional[str] = None        
-    id_role    : int
-    id_user    : int
-    role       : List[Role]       
-    user       : List[Role]   
+# -------- Match -------- #      
 
-    class Config():
-        orm_mode = True     
+
 
 
 

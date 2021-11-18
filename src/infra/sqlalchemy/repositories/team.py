@@ -13,19 +13,19 @@ class TeamRepository():
     def get(self,id):
         return self.db.query(models.Team).filter(models.Team.id == id).first()
 
-    def store(self, team: schemas.Team):
+    def store(self, model: schemas.Team):
         
-        db_team = models.Team(
-            name=team.name,
-            color=team.color, 
-            picture=team.picture
+        db_model = models.Team(
+            name=model.name,
+            color=model.color, 
+            picture=model.picture
         )
 
-        self.db.add(db_team)
+        self.db.add(db_model)
         self.db.commit()
-        self.db.refresh(db_team)
+        self.db.refresh(db_model)
 
-        return db_team
+        return db_model
 
     def update(self):
         pass

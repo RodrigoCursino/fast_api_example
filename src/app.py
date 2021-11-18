@@ -1,19 +1,28 @@
-from fastapi import FastAPI, Depends
-from sqlalchemy.orm.session import Session
-from src.infra.sqlalchemy.repositories.team import TeamRepository
-from src.infra.sqlalchemy.config.database   import get_db
-from src.schemas.schemas import Team
+from fastapi                 import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from src.routers             import teams, users, auth
 
 api = FastAPI()
+# uvicorn src.server:app --reload --reload-dir=src
 
-@api.post('/teams')
-def store(team: Team, db: Session = Depends(get_db)):
-    return TeamRepository(db).store(team)
+# CORS
+origins = [
+    'http://127.0.0.1:8000',
+]
 
-@api.get('/teams')
-def list_all(db: Session = Depends(get_db)):
-    return TeamRepository(db).list()
+api.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@api.get('/team-by-id')
-def list_all(id:int, db: Session = Depends(get_db)):
-    return TeamRepository(db).get(id)
+# Route Teams
+api.include_router(teams.router)
+# Route Users
+api.include_router(users.router)
+# Route Auth
+api.include_router(auth.router)
+
+

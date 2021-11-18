@@ -1,6 +1,7 @@
 from src.infra.sqlalchemy.config.database import Base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
+from src.infra.providers import hash_provider
 
 class User(Base):
     __tablename__ = "users"
@@ -8,20 +9,22 @@ class User(Base):
     username   = Column(String(100))
     picture    = Column(String(800))
     stars      = Column(Integer)
-    type       = Column(String(10))
     cellphone  = Column(String(20), unique=True)
     password   = Column(String(255))
     activate   = Column(Boolean, default=True)
-    #roles      = relationship('RoleUser', back_populates="roles_users")
+    #roles      = relationship('RoleUser', viewonly=True, lazy='joined')
+    roles      = relationship('RoleUser',
+                               backref='roles_users',
+                               lazy='joined',
+                               viewonly=True)
 
-    def __init__(self, username, picture, stars, type, cellphone, password, activate=True):
+    def __init__(self, username, picture, stars, cellphone, password, activate=True):
         self.username  = username
         self.picture   = picture
         self.stars     = stars
-        self.type      = type
         self.cellphone = cellphone
         self.activate  = activate
-        self.password  = password
+        self.password  = hash_provider.get_hash(password)
 
 class Role(Base):
     __tablename__ = "roles"
@@ -98,8 +101,8 @@ class Statistic(Base):
     # ['GOL', 'ASSSITENCIA', 'VITORIA', 'DERROTA', 'EMPATE']
     status                = Column(String(50))
     activate              = Column(Boolean, default=True)
-    #match                 = relationship('Match', back_populates="matchs")
-    #user                  = relationship('User', back_populates="users")
+    match                 = relationship('Match')
+    user                  = relationship('User')
 
     def __init__(self, id_user, id_match, date, status, activate):
         self.id_user  = id_user 
@@ -116,8 +119,8 @@ class RoleUser(Base):
     id         = Column(Integer, primary_key=True, autoincrement=True)
     id_role    = Column(ForeignKey('roles.id'), name="fk_role_roles_users", primary_key=True)
     id_user    = Column(ForeignKey('users.id'), name="fk_user_roles_users", primary_key=True)
-    #role       = relationship('Role', foreign_keys=id_role, back_populates="roles_users")
-    #user       = relationship('User', foreign_keys=id_user,  back_populates="roles_users")
+    role       = relationship('Role', foreign_keys=id_role, lazy='joined')
+    user       = relationship('User', foreign_keys=id_user, lazy='joined')
     activate   = Column(Boolean, default=True)
 
     def __init__(self, user, role, activate=True):
