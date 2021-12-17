@@ -1,3 +1,6 @@
+# init
+alembic init alembic
+
 # revisao
 alembic revision --autogenerate -m "Hello World"
 

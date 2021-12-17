@@ -1,6 +1,8 @@
-from fastapi                 import FastAPI
+from fastapi                 import FastAPI, Request
+from fastapi.templating      import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from src.routers             import teams, users, auth
+from fastapi.staticfiles     import StaticFiles
 
 api = FastAPI()
 # uvicorn src.server:app --reload --reload-dir=src
@@ -18,11 +20,24 @@ api.add_middleware(
     allow_headers=["*"],
 )
 
+# arquivos estáticos gerados pelo build
+api.mount("/js/", StaticFiles(directory="src/static/js"))
+api.mount("/css/", StaticFiles(directory="src/static/css"))
+api.mount("/img/", StaticFiles(directory="src/static/img"))   
+# arquivos estáticos gerados pelo build
+
+# index build files
+templates = Jinja2Templates(directory="src/templates") 
+
 # Route Teams
 api.include_router(teams.router)
 # Route Users
 api.include_router(users.router)
 # Route Auth
 api.include_router(auth.router)
+
+@api.get("/")
+async def serve_home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
