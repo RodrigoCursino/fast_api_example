@@ -1,9 +1,24 @@
 <template>
   <div class="login_form">
     <div class="form">
-      <input  class="input_form" type="tel">
-      <input  class="input_form" type="password">
-      <button class="input_form btn_login">LOGAR</button>
+      <input  class="input_form"
+              v-model="loginForm.cellphone" 
+              type="tel"
+      >
+      <input  class="input_form"
+              v-model="loginForm.password" 
+              type="password"
+      >
+      <button class="input_form btn_login"
+              @click="login()"
+      >
+        LOGAR
+      </button>
+      <button class="input_form btn_login"
+              @click="teste()"
+      >
+        LOGAR
+      </button>
     </div>
     <div class="footer">
       <img src="@/assets/img/background_login_form.jpg" />
@@ -12,8 +27,34 @@
 </template>
 
 <script>
+import { UserMixin } from "@/modules/User/UserMixin.js"
+import { AjaxMixin } from "@/mixins/AjaxMixin.js"
 export default {
-  name: "login-form"
+  name: "login-form",
+  mixins: [
+    AjaxMixin,
+    UserMixin
+  ],
+  data: () => ({
+    loginForm: {
+      cellphone: "",
+      password: ""
+    }
+  }),
+  methods: {
+    async login() {
+        let data = await this.post('auth/login', this.loginForm)
+        if(data?.status===200) {
+          this.set_user(data.data)
+        }
+    },
+    async teste() {
+        let data = await this.get('teams')
+        if(data?.status===200) {
+          console.info("teams ",data.data)
+        }
+    }
+  }
 }
 </script>
 

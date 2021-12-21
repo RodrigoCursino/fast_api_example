@@ -4,7 +4,7 @@
 alembic.ini
 
 #python
-venv36
+venv39
 __pycache__
 *.pyc
 
