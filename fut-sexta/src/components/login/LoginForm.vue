@@ -46,6 +46,9 @@ export default {
         let data = await this.post('auth/login', this.loginForm)
         if(data?.status===200) {
           this.set_user(data.data)
+          if(this.user) {
+            this.$router.push({name: "home"})
+          }
         }
     },
     async teste() {

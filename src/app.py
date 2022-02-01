@@ -25,6 +25,7 @@ api.add_middleware(
 api.mount("/js/", StaticFiles(directory="src/static/js"))
 api.mount("/css/", StaticFiles(directory="src/static/css"))
 api.mount("/img/", StaticFiles(directory="src/static/img"))   
+api.mount("/fonts/", StaticFiles(directory="src/static/fonts"))  
 # arquivos estáticos gerados pelo build
 
 # index build files
