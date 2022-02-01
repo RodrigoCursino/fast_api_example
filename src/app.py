@@ -2,7 +2,7 @@ from fastapi                 import FastAPI, Request
 from fastapi.templating      import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from src.routers             import teams, users, auth
-from fastapi.staticfiles     import StaticFiles
+#from fastapi.staticfiles     import StaticFiles
 
 api = FastAPI()
 # uvicorn src.server:app --reload --reload-dir=src
