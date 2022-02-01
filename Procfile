@@ -1,1 +1,1 @@
-web: uvicorn src.app:api --reload --reload-dir=src
+web: gunicorn -w 4 -k uvicorn.workers.UvicornWorker --reload-dir=src
