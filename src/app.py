@@ -38,9 +38,13 @@ api.add_middleware(
 # Route Auth
 # api.include_router(auth.router)
 
-@api.get("/")
-async def serve_home(request: Request):
-    return {"message": "Heroku Hello World"}
+#@api.get("/")
+#async def serve_home(request: Request):
+    #return {"message": "Heroku Hello World"}
     #return templates.TemplateResponse("index.html", {"request": request})
+
+@api.get("/")
+def hello():
+    return {"message":"Heroku Hello World"}
 
 
