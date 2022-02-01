@@ -1,1 +1,1 @@
-web: python "run.py"
+web: uvicorn src.app:api --reload --reload-dir=src
